@@ -1,0 +1,13 @@
+.wraper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.engine-capacity{
+    display: block;
+}
+
+.hiden{
+display: none;
+}

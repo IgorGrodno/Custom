@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet">
+    <title>Custom</title>
+</head>
+
+<body>
+    <div class="wraper">
+        <header class="header">
+            <h1>Таможня</h1>
+        </header>
+        <section class="main">
+            <div class="year">
+                <div class="year-text">Возраст на день таможни в годах</div>
+                <select id="vehicaleAge">
+                    <option selected value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8 и более</option>
+                </select>
+            </div>
+            <div class="engine">
+                <div class="engine-type">
+                    <input type="radio" id="engineTypeChoice1" name="engineType" value="ev">
+                    <label for="yearChoice1">Электричка</label>
+                </div>
+                <div class="year-input">
+                    <input type="radio" id="engineTypeChoice2" name="engineType" value="fuel" checked>
+                    <label for="yearChoice2">ДВС</label>
+                </div>
+            </div>
+            <div class="engine-capacity" id="engineCapality">
+                <div class="price-text">Объем двигателя в см.</div>
+                <input class="price-input" type="number" min="100" value="1000" id="engineCapalityValue">
+            </div>
+            <div class="price">
+                <div class="price-text">Сумма по инвойсу $</div>
+                <input class="price-input" type="number" min="100" value="1000" id="priceValue">
+            </div>
+            <div class="result">
+                <div class="custom-price" id="customPrice"></div>
+                <div class="custom-half-price" id="customHalfPrice"></div>
+            </div>
+        </section>
+    </div>
+</body>
+<script src="script.js"></script>
+
+</html>
