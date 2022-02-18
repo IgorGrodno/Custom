@@ -14,6 +14,10 @@
         <header class="header">
             <h1>Таможня</h1>
         </header>
+        <section class="data">
+            <div class="dollarBYNRatio" id="dollarBYNRatio"></div>
+            <div class="euroDollarRatio" id="euroDollarRatio"></div>
+        </section>
         <section class="main">
             <div class="year">
                 <div class="year-text">Возраст на день таможни в годах</div>
@@ -46,9 +50,9 @@
                 <div class="price-text">Сумма по инвойсу $</div>
                 <input class="price-input" type="number" min="100" value="1000" id="priceValue">
             </div>
-            <div class="result">
-                <div class="custom-price" id="customPrice"></div>
-                <div class="custom-half-price" id="customHalfPrice"></div>
+        </section>
+        <section class="output">
+            <div class="result" id="result">
             </div>
         </section>
     </div>

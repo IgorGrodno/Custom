@@ -10,10 +10,6 @@ const result = document.getElementById("result");
 
 const vehicaleAge = document.getElementById("vehicaleAge");
 
-const customPriceOutput = document.getElementById("customPrice");
-const customHalfPriceOutput = document.getElementById("customHalfPrice");
-
-
 let euroDollarRatio = 1.13;
 let dollarBYNRatio = 2.57;
 let scrapCollectionBYNYang = 545;
@@ -61,12 +57,12 @@ function ShowHiddeEngineCapality() {
 
 
 function AdditionallyPayesInUSD(age) {
-    let additionallyPayes = 0;
+    let additionallyPayes = customerBYN + timedWarehouseBYN + declarantBYN;
     if (age < 3) {
-        additionallyPayes = scrapCollectionBYNYang + customerBYN + timedWarehouseBYN + declarantBYN;
+        additionallyPayes = additionallyPayes + scrapCollectionBYNYang;
     }
     else {
-        additionallyPayes = scrapCollectionBYNNormal + customerBYN + timedWarehouseBYN + declarantBYN;
+        additionallyPayes = additionallyPayes + scrapCollectionBYNNormal;
     }
     return additionallyPayes / dollarBYNRatio;
 }
@@ -126,44 +122,59 @@ function CustomCalculate() {
 
     let result = [];
     let customPrice;
-    let customHalfPrice;
+    let scrapPay;
+
+    if (vehicaleAge.value < 3) {
+        scrapPay = scrapCollectionBYNYang;
+    }
+    else {
+        scrapPay = scrapCollectionBYNNormal;
+    }
 
     if (engineTypeEV.checked == true) {
-        customPrice = EVCustom(priceValue.value) + AdditionallyPayesInUSD(vehicaleAge.value);
-        customHalfPrice = (EVCustom(priceValue.value) / 2) + (AdditionallyPayesInUSD(vehicaleAge.value));
-
+        customPrice = EVCustom(priceValue.value);
     }
     else {
         if (vehicaleAge.value < 3) {
-            customPrice = YangFuelCustomPrice(priceValue.value, engineCapalityValue.value, yangCustomPrices) + AdditionallyPayesInUSD(vehicaleAge.value);
-            customHalfPrice = (YangFuelCustomPrice(priceValue.value, engineCapalityValue.value, yangCustomPrices) / 2) + AdditionallyPayesInUSD(vehicaleAge.value);
+            customPrice = YangFuelCustomPrice(priceValue.value, engineCapalityValue.value, yangCustomPrices);
         }
         if ((vehicaleAge.value >= 3) && (vehicaleAge.value < 5)) {
-            customPrice = NormalFuelCustomPrice(engineCapalityValue.value, normalCustomPrices) + AdditionallyPayesInUSD(vehicaleAge.value);
-            customHalfPrice = (NormalFuelCustomPrice(engineCapalityValue.value, normalCustomPrices) / 2) + AdditionallyPayesInUSD(vehicaleAge.value);
+            customPrice = NormalFuelCustomPrice(engineCapalityValue.value, normalCustomPrices);
         }
         if (vehicaleAge.value >= 5) {
-            customPrice = NormalFuelCustomPrice(engineCapalityValue.value, oldCustomPrices) + AdditionallyPayesInUSD(vehicaleAge.value);
-            customHalfPrice = (NormalFuelCustomPrice(engineCapalityValue.value, oldCustomPrices) / 2) + AdditionallyPayesInUSD(vehicaleAge.value);
+            customPrice = NormalFuelCustomPrice(engineCapalityValue.value, oldCustomPrices);
         }
     }
 
-    result.push({ text: "таможня полная, со всеми платежами", price: customPrice });
-    result.push({ text: "таможня льготная, со всеми платежами", price: customHalfPrice });
+    result.push({ text: "таможня полная, со всеми платежами в $ ", price: Math.ceil(customPrice + AdditionallyPayesInUSD(vehicaleAge.value)) });
+    result.push({ text: "таможня льготная, со всеми платежами в $ ", price: Math.ceil(customPrice / 2 + AdditionallyPayesInUSD(vehicaleAge.value)) });
+    result.push({ text: "таможня льготная в BYN ", price: Math.ceil(customPrice * dollarBYNRatio) });
+    result.push({ text: "таможня льготная в BYN ", price: Math.ceil(customPrice / 2 * dollarBYNRatio) });
+    result.push({ text: "утильсбор ", price: scrapPay });
+    result.push({ text: "услуги декларанта ", price: declarantBYN });
+    result.push({ text: "услуги таможенного инспектора ", price: customerBYN });
+    result.push({ text: "улуги склада временного хранения ", price: timedWarehouseBYN });
+    result.push({ text: "итого в по льготе BYN ", price: Math.ceil(customPrice / 2 * dollarBYNRatio + scrapPay + declarantBYN + customerBYN + timedWarehouseBYN) });
     return result;
 }
 
 
-function ResultOutput(resultArr) {
-    customPriceOutput.innerHTML = resultArr[0].text + " " + Math.ceil(resultArr[0].price);
-    customHalfPriceOutput.innerHTML = resultArr[1].text + " " + Math.ceil(resultArr[1].price);
+function ResultOutput(resultArr, target) {
+    target.innerHTML = "";
+    for (let i = 0; i < resultArr.length; i++) {
+        target.innerHTML += "<div>" + resultArr[i].text + resultArr[i].price + "</div>";
+    }
 }
 
 
 engineTypeEV.addEventListener("change", ShowHiddeEngineCapality);
 engineTypeFuel.addEventListener("change", ShowHiddeEngineCapality);
-engineTypeEV.addEventListener("change", (event) => { ResultOutput(CustomCalculate()) });
-engineTypeFuel.addEventListener("change", (event) => { ResultOutput(CustomCalculate()) });
-engineCapalityValue.addEventListener("change", (event) => { ResultOutput(CustomCalculate()) });
-priceValue.addEventListener("change", (event) => { ResultOutput(CustomCalculate()) });
-vehicaleAge.addEventListener("change", (event) => { ResultOutput(CustomCalculate()) });
+engineTypeEV.addEventListener("change", (event) => { ResultOutput(CustomCalculate(), result) });
+engineTypeFuel.addEventListener("change", (event) => { ResultOutput(CustomCalculate(), result) });
+engineCapalityValue.addEventListener("change", (event) => { ResultOutput(CustomCalculate(), result) });
+priceValue.addEventListener("change", (event) => { ResultOutput(CustomCalculate(), result) });
+vehicaleAge.addEventListener("change", (event) => { ResultOutput(CustomCalculate(), result) });
+document.addEventListener("DOMContentLoaded", (event) => {
+    document.getElementById("dollarBYNRatio").innerHTML = "курс доллара: " + dollarBYNRatio;
+    document.getElementById("euroDollarRatio").innerHTML = "конверсия Евро/Доллар: " + euroDollarRatio;
+})
