@@ -135,8 +135,6 @@ function CustomCalculate() {
     }
     else {
         if (vehicaleAge.value < 3) {
-            alert(YangFuelCustomPrice(priceValue.value, engineCapalityValue.value, yangCustomPrices));
-            alert(AdditionallyPayesInUSD(vehicaleAge.value));
             customPrice = YangFuelCustomPrice(priceValue.value, engineCapalityValue.value, yangCustomPrices) + AdditionallyPayesInUSD(vehicaleAge.value);
             customHalfPrice = (YangFuelCustomPrice(priceValue.value, engineCapalityValue.value, yangCustomPrices) / 2) + AdditionallyPayesInUSD(vehicaleAge.value);
         }
