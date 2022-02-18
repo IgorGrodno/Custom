@@ -84,8 +84,9 @@ function YangFuelCustomPrice(price, engineCapality, сustomPrices) {
     let coefficient;
     let procent;
 
+
     for (let i = 0; i < сustomPrices.length; i++) {
-        if ((price >= сustomPrices[i].min) && (price <= сustomPrices[i].max)) {
+        if ((price >= сustomPrices[i].min * euroDollarRatio) && (price <= сustomPrices[i].max * euroDollarRatio)) {
             coefficient = сustomPrices[i].coefficient;
             procent = сustomPrices[i].procent;
             break;
@@ -99,7 +100,7 @@ function YangFuelCustomPrice(price, engineCapality, сustomPrices) {
         return engineCapalityCustom * euroDollarRatio;
     }
     else {
-        return priceCustom * euroDollarRatio;
+        return priceCustom;
     }
 }
 
@@ -134,6 +135,8 @@ function CustomCalculate() {
     }
     else {
         if (vehicaleAge.value < 3) {
+            alert(YangFuelCustomPrice(priceValue.value, engineCapalityValue.value, yangCustomPrices));
+            alert(AdditionallyPayesInUSD(vehicaleAge.value));
             customPrice = YangFuelCustomPrice(priceValue.value, engineCapalityValue.value, yangCustomPrices) + AdditionallyPayesInUSD(vehicaleAge.value);
             customHalfPrice = (YangFuelCustomPrice(priceValue.value, engineCapalityValue.value, yangCustomPrices) / 2) + AdditionallyPayesInUSD(vehicaleAge.value);
         }
